@@ -758,7 +758,7 @@ this["FirechatDefaultTemplates"]["templates/user-search-list-item.html"] = funct
     this.maxLengthUsername = 15;
     this.maxLengthUsernameDisplay = 15;
     this.maxLengthRoomName = 24;
-    this.maxLengthMessage = 1200;
+    this.maxLengthMessage = 12000;
     this.maxUserSearchResults = 100;
 
     // Define some useful regexes.
