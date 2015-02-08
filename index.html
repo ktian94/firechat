@@ -40,10 +40,6 @@
         <div class="row">
           <div class="span6 offset3">
             <div id="firechat-container" class="clearfix"></div>
-            <div id="user-info">
-              Logged in as <span id="user-name">.</span>
-              <a href="javascript:logout();">Logout</a>
-            </div>
           </div>
         </div>
     </div>
@@ -89,48 +85,21 @@
   <!-- Download from https://github.com/firebase/Firechat -->
   <link rel="stylesheet" href="firechat/2.0.0/firechat-default.css" />
   <script src="firechat/2.0.0/firechat-default.js"></script>
-  <script>
-    var chatRef = new Firebase('https://firesidechatsapp.firebaseio.com'),
-        target = document.getElementById("firechat-container"),
-        authModal = $('#auth-modal').modal({ show: false }),
-        chat = new FirechatUI(chatRef, target);
-
-    chat.on('auth-required', function() {
-      authModal.modal('show');
-      return false;
-    });
-
-    chatRef.onAuth(function(authData) {
-      if (authData) {
-        var userId = authData.uid,
-            username = authData[authData.provider].displayName;
-
-        chat.setUser(userId, username);
-        $('#user-name').text(username);
-        $('#user-info').show();
-        setTimeout(function() {
-          chat._chat.enterRoom('-Iy1N3xs4kN8iALHV0QA')
-        }, 500);
-      } else {
-        $('#user-info').hide();
-        chat._chat.enterRoom('-Iy1N3xs4kN8iALHV0QA')
-      }
-    });
-
-    function login(provider) {
-      authModal.modal('hide');
-      chatRef.authWithOAuthPopup(provider, function(error, authData) {
-        if (error) {
-          console.log(error);
+  <script type="text/javascript">
+      var chatRef = new Firebase("https://firesidechatsapp.firebaseio.com");
+      var chat = new FirechatUI(chatRef, document.getElementById("firechat-container"));
+      chatRef.onAuth(function(authData) {
+        if (authData) {
+          chat.setUser(authData.uid, "Anonymous" + authData.uid.substr(10, 8));
+        } else {
+          chatRef.authAnonymously(function(error, authData) {
+            if (error) {
+              console.log(error);
+            }
+          });
         }
       });
-    }
-
-    function logout() {
-      chatRef.unauth();
-      location.reload();
-    }
-  </script>
+    </script>
 
   <!-- Twitter / Facebook / Google -->
   <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
